@@ -19,6 +19,34 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+
+	// thymeleaf
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf' //
+
+	// security
+	implementation 'org.springframework.boot:spring-boot-starter-security:3.4.2'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.security:spring-security-config:6.4.2'
+	implementation 'org.springframework.security:spring-security-web:6.4.2'
+
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.12.6'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+
+	// springdata R2DBC for oracle
+	implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+	implementation 'com.oracle.database.r2dbc:oracle-r2dbc:1.0.0'
+
+	// Liquibase for Database Migrations
+	implementation 'org.liquibase:liquibase-core'
+
+	// lombok for reducing boilerplate
+	implementation 'org.projectlombok:lombok:1.18.36'
+	annotationProcessor 'org.projectlombok:lombok:1.18.36'
+
+	// testing
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }

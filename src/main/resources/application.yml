@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: fun
+  r2dbc:
+    url: r2dbc:oracle://localhost:1521/ORCL
+    username: DB-USER
+    password: db-pass
+  liquibase:
+    enabled: true
+    change-log: classpath://db/changelog/db.changelog-master.xml
+jwt:
+  secret: your-secret-key
+  expirationMs: 3600000 # 1 hr
+server:
+  port: 8080
