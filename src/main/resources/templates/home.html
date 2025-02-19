@@ -4,10 +4,8 @@
     <title>Home</title>
 </head>
 <body>
-<h2>Welcome, <span th:text="${#httpServletRequest.remoteUser}"></span>!</h2>
-<form th:action="@{/logout}" method="post">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-    <button type="submit">Logout</button>
-</form>
+<h1 th:text="${greeting}"></h1>
+<h1 th:text="${name}"></h1>
+<a href="/logout">Logout</a>
 </body>
 </html>
