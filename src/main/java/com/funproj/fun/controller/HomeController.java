@@ -7,10 +7,13 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class HomeController {
 
-    @GetMapping("/")
+    @GetMapping("/home")
     public String home(Model model) {
+
+
         model.addAttribute("greeting", "Hello, ");
         model.addAttribute("name", "Adrian");
+//        model.addAttribute("connection", connected);
         return "home"; // Corresponds to logged_in.html in templates
     }
 }

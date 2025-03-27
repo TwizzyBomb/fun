@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
@@ -29,12 +30,16 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public Mono<User> register(@RequestBody User user) {
-        return authService.register(user);
+    public Mono<String> register(@ModelAttribute User user) {
+
+        return authService.register(user)
+                .doOnSuccess(savedUser -> System.out.println("User saved: " + savedUser.getUsername()))
+                .flatMap(savedUser -> Mono.just("redirect:/auth/login")); // Redirect to login page after successful registration
     }
 
     @PostMapping("/login")
     public Mono<String> login(@RequestBody User user){
+        System.out.println("Login Request received for:" + user.getUsername());
         return authService.authenticate(user.getUsername(), user.getPassword());
     }
 }

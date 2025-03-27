@@ -2,9 +2,14 @@ spring:
   application:
     name: fun
   r2dbc:
-    url: r2dbc:oracle://localhost:1521/ORCL
-    username: DB-USER
-    password: db-pass
+    url: r2dbc:oracle://localhost:1521/XEPDB1
+    username: twizzybomb
+    password: pass123
+    pool:
+      enabled: true
+  sql:
+    init:
+      platform: oracle
   liquibase:
     enabled: true
     change-log: classpath://db/changelog/db.changelog-master.xml
@@ -13,3 +18,8 @@ jwt:
   expirationMs: 3600000 # 1 hr
 server:
   port: 8080
+logging:
+  level:
+    io.r2dbc: debug
+    org.springframework.r2dbc: debug
+    liquibase: debug

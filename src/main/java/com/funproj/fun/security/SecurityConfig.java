@@ -1,11 +1,12 @@
 package com.funproj.fun.security;
 
+import com.funproj.fun.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.userdetails.*;
@@ -25,12 +26,15 @@ import java.net.URI;
 @EnableWebFluxSecurity
 public class SecurityConfig {
 
+    @Autowired
+    UserRepository userRepository;
+
     @Bean
         public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) throws Exception {
             return http
                     .csrf(csrf -> csrf.disable()) // Correct way to disable CSRF in Spring Security 6 AbstractHttpConfigurer::disable
                     .authorizeExchange(auth -> auth
-                            .pathMatchers("/", "/login", "/css/**", "/js/**").permitAll() // Allow anyone to access these pages
+                            .pathMatchers("/", "/login", "/register", "/css/**", "/js/**", "/auth/**").permitAll() // Allow anyone to access these pages
                             .anyExchange().authenticated() // Require authentication for any other request
                     )
                     .formLogin(form -> form
@@ -55,17 +59,29 @@ public class SecurityConfig {
         return authManager;
     }
 
-    // Define the in-memory user details
     @Bean
-    public ReactiveUserDetailsService userDetailsService() {
-        UserDetails user = User.builder()
-                .username("user")
-                .password(passwordEncoder().encode("password")) // Securely hash password
-                .roles("USER")
-                .build();
-
-        return new MapReactiveUserDetailsService(user);
+    public ReactiveUserDetailsService userDetailsService(UserRepository userRepository) { // added repo to args
+        return username -> userRepository.findByUsername(username)
+                .map(user -> User.withUsername(user.getUsername())
+                        .password(user.getPassword()) // password must already be hashed in db
+                        .roles("USER") // Modify based on your roles setup
+                        .build()
+                );
     }
+//@Bean
+//public ReactiveUserDetailsService userDetailsService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+//    return username -> userRepository.findByUsername(username)
+//            .map(user -> {
+//                // Ensure the password in DB is hashed, not plaintext
+//                if (passwordEncoder.matches(user.getPassword(), password)) {
+//                    return User.withUsername(user.getUsername())
+//                            .password(user.getPassword()) // The password is already hashed in the DB
+//                            .roles(user.getRole()) // Assuming the role is stored in DB
+//                            .build();
+//                }
+//                throw new BadCredentialsException("Invalid username or password");
+//            });
+//}
 
     @Bean
     public PasswordEncoder passwordEncoder() {
