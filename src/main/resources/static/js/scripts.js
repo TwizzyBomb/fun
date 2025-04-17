@@ -17,9 +17,10 @@ async function submitLogin() {
             console.log("Response Text:", await response.text());
 
             if (response.ok) {
-                const token = await response.text();
-                console.log("JWT Token:", token);
-                alert("Login successful! Token: " + token);
+//                const token = await response.json();
+//                console.log("JWT Token:", token);
+//                alert("Login successful! Token: " + token);
+                window.location.href = "/home";// <-- manual redirection, sec filter checks jwt everytime
             } else {
                 document.getElementById("error-message").textContent = "Invalid username or password";
             }
