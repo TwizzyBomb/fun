@@ -58,9 +58,9 @@ public class AuthService {
      * 4. On failure: returns error message
      */
     public Mono<String> authenticate(String username, String password){
-//        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String hashedPassword = passwordEncoder.encode(password);
         System.out.println("Hashed password in manager: " + hashedPassword);
+
         return reactiveAuthenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password) // creates the token for passing into authManager.authenticate()
             ).doOnNext(auth -> System.out.println("Authenticated: " + auth.isAuthenticated())).doOnError(err -> System.err.println("Auth failed: " + err.getMessage()))
